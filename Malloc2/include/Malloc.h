@@ -9,7 +9,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <zconf.h>
-#define BLOCK_SIZE 40
 typedef struct s_block t_block;
 
 struct s_block
