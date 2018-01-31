@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <zconf.h>
+
 typedef struct s_block t_block;
 
 struct s_block
@@ -20,14 +21,18 @@ struct s_block
     bool free;
 };
 
-void initialize_block(t_block* p_block);
 t_block* extend_heap(size_t p_size);
+
+//Malloc_perso and free_perso
 void* allocate_memory(size_t p_size);
 void free_memory(void *p_address);
 
-size_t align(size_t p_size);
+void initialize_block(t_block* p_block);
 t_block* find_block(size_t p_size);
 void split_block(t_block* p_block, size_t p_size);
+
+//try_to_fusion! Bad English! corrected to try_to_fuse
 t_block* try_to_fuse(t_block* p_block);
 
+size_t align(size_t p_size);
 #endif //MALLOC_MALLOC_H

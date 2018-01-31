@@ -1,9 +1,10 @@
 //
 // Created by h.shin on 1/30/18.
 //
-#include <zconf.h>
-#include <string.h>
+
 #include "../include/Malloc.h"
+#include <math.h>
+
 void* first_block_address = NULL;
 
 void initialize_block(t_block* p_block)
@@ -75,7 +76,10 @@ void* allocate_memory(size_t p_size)
 
 size_t align(size_t p_size)
 {
-    return (p_size + (sizeof(size_t) - 1)) & ~(sizeof(size_t) - 1);
+    if(p_size == 0)
+        return 0;
+
+    return ((p_size + (sizeof(size_t) - 1)) & ~(sizeof(size_t) - 1));
 }
 
 t_block *find_block(size_t p_size)
@@ -98,7 +102,7 @@ void split_block(t_block *p_block, size_t p_size)
         return;
 
     t_block* to_split;
-    to_split = (t_block*)((char*)p_block->data + p_size);
+    to_split = (t_block*)((intptr_t)p_block->data << (int)(log2(p_size)));
     to_split->size = p_block->size - p_size - sizeof(t_block);
     to_split->next_block = p_block->next_block;
     to_split->prev_block = p_block;
@@ -141,12 +145,18 @@ void free_memory(void *p_address)
             if (free_manager->prev_block && free_manager->prev_block->free)
             {
                 free_manager = try_to_fuse(free_manager->prev_block);
-                memset(free_manager + 1, 0, free_manager->size);
+                for(int i = 0; i < (int)(free_manager->size); ++i)
+                {
+                    ((int*)p_address)[i] = 0;
+                }
             }
             if (free_manager->next_block)
             {
                 try_to_fuse(free_manager);
-                memset(free_manager + 1, 0, free_manager->size);
+                for(int i = 0; i < (int)(free_manager->size); ++i)
+                {
+                    ((int*)p_address)[i] = 0;
+                }
             }
             else
             {
@@ -154,8 +164,10 @@ void free_memory(void *p_address)
                 {
                     free_manager->prev_block->next_block = NULL;
                 }
-                memset(free_manager + 1, 0, free_manager->size);
-                //brk(free_manager);
+                for(int i = 0; i < (int)(free_manager->size); ++i)
+                {
+                    ((int*)p_address)[i] = 0;
+                }
             }
         }
     }
