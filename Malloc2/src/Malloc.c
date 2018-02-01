@@ -134,40 +134,26 @@ void free_memory(void *p_address)
 {
     if (!p_address)
         return;
-
-    t_block *free_manager;
+    t_block *temp = NULL;
+    t_block *free_manager = NULL;
     if(first_block_address)
     {
-        if(p_address > first_block_address && p_address < sbrk(0))
+        if (p_address > first_block_address && p_address < sbrk(0))
         {
-            free_manager = (t_block*)((char*)p_address - sizeof(t_block));
+            free_manager = (t_block*) ((char*) p_address - sizeof(t_block));
+            temp = free_manager;
             free_manager->free = true;
             if (free_manager->prev_block && free_manager->prev_block->free)
             {
                 free_manager = try_to_fuse(free_manager->prev_block);
-                for(int i = 0; i < (int)(free_manager->size); ++i)
-                {
-                    ((int*)p_address)[i] = 0;
-                }
             }
             if (free_manager->next_block)
             {
                 try_to_fuse(free_manager);
-                for(int i = 0; i < (int)(free_manager->size); ++i)
-                {
-                    ((int*)p_address)[i] = 0;
-                }
             }
-            else
+            for (unsigned int i = 0; i < (unsigned int)(temp->size); ++i)
             {
-                if (free_manager->prev_block)
-                {
-                    free_manager->prev_block->next_block = NULL;
-                }
-                for(int i = 0; i < (int)(free_manager->size); ++i)
-                {
-                    ((int*)p_address)[i] = 0;
-                }
+                ((char*)p_address)[i] = 0;
             }
         }
     }
