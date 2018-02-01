@@ -5,10 +5,10 @@
 #ifndef MALLOC_MALLOC_H
 #define MALLOC_MALLOC_H
 
-#include <glob.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <zconf.h>
+#include "AuxFunctions.h"
 
 typedef struct s_block t_block;
 
@@ -33,6 +33,4 @@ void split_block(t_block* p_block, size_t p_size);
 
 //try_to_fusion! Bad English! corrected to try_to_fuse
 t_block* try_to_fuse(t_block* p_block);
-
-size_t align(size_t p_size);
 #endif //MALLOC_MALLOC_H

@@ -40,9 +40,10 @@ void* allocate_memory(size_t p_size)
     if(p_size == 0)
         return NULL;
 
-    t_block* prev;
-    t_block* temp;
+    t_block* prev = NULL;
+    t_block* temp = NULL;
     size_t aligned_size = align(p_size);
+
     if(!first_block_address)
     {
         temp = extend_heap(aligned_size);
@@ -54,7 +55,7 @@ void* allocate_memory(size_t p_size)
         temp = find_block(p_size);
         if(temp)
         {
-            if((temp->size - aligned_size) >= (sizeof(t_block) + 4))
+            if((temp->size - aligned_size) >= (sizeof(t_block) + sizeof(int)))
             {
                 split_block(temp, aligned_size);
             }
@@ -74,24 +75,16 @@ void* allocate_memory(size_t p_size)
     return temp->data;
 }
 
-size_t align(size_t p_size)
-{
-    if(p_size == 0)
-        return 0;
-
-    return ((p_size + (sizeof(size_t) - 1)) & ~(sizeof(size_t) - 1));
-}
-
 t_block *find_block(size_t p_size)
 {
     t_block* temp = (t_block*)first_block_address;
     while(temp)
     {
-        temp = temp->next_block;
-        if(temp && temp->free && temp->size >= p_size)
+        if(temp->free && temp->size >= p_size)
         {
             return temp;
         }
+        temp = temp->next_block;
     }
     return NULL;
 }
@@ -101,8 +94,8 @@ void split_block(t_block *p_block, size_t p_size)
     if(!p_block || p_size == 0)
         return;
 
-    t_block* to_split;
-    to_split = (t_block*)((intptr_t)p_block->data << (int)(log2(p_size)));
+    t_block* to_split = NULL;
+    to_split = (t_block*)((char*)p_block->data + p_size);
     to_split->size = p_block->size - p_size - sizeof(t_block);
     to_split->next_block = p_block->next_block;
     to_split->prev_block = p_block;
@@ -115,7 +108,7 @@ void split_block(t_block *p_block, size_t p_size)
         to_split->next_block->prev_block = to_split;
 }
 
-t_block *try_to_fuse(t_block *p_block)
+t_block* try_to_fuse(t_block *p_block)
 {
     if(!p_block)
         return NULL;
@@ -134,13 +127,14 @@ void free_memory(void *p_address)
 {
     if (!p_address)
         return;
+
     t_block *temp = NULL;
     t_block *free_manager = NULL;
     if(first_block_address)
     {
         if (p_address > first_block_address && p_address < sbrk(0))
         {
-            free_manager = (t_block*) ((char*) p_address - sizeof(t_block));
+            free_manager = (t_block*)((char*) p_address - sizeof(t_block));
             temp = free_manager;
             free_manager->free = true;
             if (free_manager->prev_block && free_manager->prev_block->free)
@@ -149,12 +143,9 @@ void free_memory(void *p_address)
             }
             if (free_manager->next_block)
             {
-                try_to_fuse(free_manager);
+                free_manager = try_to_fuse(free_manager);
             }
-            for (unsigned int i = 0; i < (unsigned int)(temp->size); ++i)
-            {
-                ((char*)p_address)[i] = 0;
-            }
+            reset_memory(p_address, temp->size);
         }
     }
 }

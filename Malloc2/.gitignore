@@ -1,5 +1,7 @@
-*.log
-build/
+cmake*
 bin/
 obj/
 *.txt
+idea*
+*.xml
+*.iml
