@@ -82,7 +82,7 @@ size_t align(size_t p_size)
     return ((p_size + (sizeof(size_t) - 1)) & ~(sizeof(size_t) - 1));
 }
 
-t_block *find_block(size_t p_size)
+t_block* find_block(size_t p_size)
 {
     t_block* temp = (t_block*)first_block_address;
     while(temp)
@@ -96,7 +96,7 @@ t_block *find_block(size_t p_size)
     return NULL;
 }
 
-void split_block(t_block *p_block, size_t p_size)
+void split_block(t_block* p_block, size_t p_size)
 {
     if(!p_block || p_size == 0)
         return;
@@ -115,7 +115,7 @@ void split_block(t_block *p_block, size_t p_size)
         to_split->next_block->prev_block = to_split;
 }
 
-t_block *try_to_fuse(t_block *p_block)
+t_block* try_to_fuse(t_block *p_block)
 {
     if(!p_block)
         return NULL;
@@ -134,40 +134,26 @@ void free_memory(void *p_address)
 {
     if (!p_address)
         return;
-
-    t_block *free_manager;
+    t_block *temp = NULL;
+    t_block *free_manager = NULL;
     if(first_block_address)
     {
-        if(p_address > first_block_address && p_address < sbrk(0))
+        if (p_address > first_block_address && p_address < sbrk(0))
         {
-            free_manager = (t_block*)((char*)p_address - sizeof(t_block));
+            free_manager = (t_block*) ((char*) p_address - sizeof(t_block));
+            temp = free_manager;
             free_manager->free = true;
             if (free_manager->prev_block && free_manager->prev_block->free)
             {
                 free_manager = try_to_fuse(free_manager->prev_block);
-                for(int i = 0; i < (int)(free_manager->size); ++i)
-                {
-                    ((int*)p_address)[i] = 0;
-                }
             }
             if (free_manager->next_block)
             {
                 try_to_fuse(free_manager);
-                for(int i = 0; i < (int)(free_manager->size); ++i)
-                {
-                    ((int*)p_address)[i] = 0;
-                }
             }
-            else
+            for (unsigned int i = 0; i < (unsigned int)(temp->size); ++i)
             {
-                if (free_manager->prev_block)
-                {
-                    free_manager->prev_block->next_block = NULL;
-                }
-                for(int i = 0; i < (int)(free_manager->size); ++i)
-                {
-                    ((int*)p_address)[i] = 0;
-                }
+                ((char*)p_address)[i] = 0;
             }
         }
     }
