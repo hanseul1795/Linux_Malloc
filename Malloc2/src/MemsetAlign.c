@@ -2,7 +2,7 @@
 // Created by h.shin on 2/1/18.
 //
 
-#include "../include/AuxFunctions.h"
+#include "../include/MemsetAlign.h"
 size_t align(size_t p_size)
 {
     if(p_size == 0)

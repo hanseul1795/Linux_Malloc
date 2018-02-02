@@ -5,7 +5,7 @@
 #ifndef MALLOC2_AUXFUNCTIONS_H
 #define MALLOC2_AUXFUNCTIONS_H
 
-#include <glob.h>
+#include "BlockVariable.h"
 
 size_t align(size_t p_size);
 

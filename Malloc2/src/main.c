@@ -1,24 +1,18 @@
 #include <stdio.h>
-#include "../include/Malloc.h"
+#include "../include/MemoryManagement.h"
 
 int main()
 {
-    int* test = (int*)allocate_memory(sizeof(int) * 100);
-    test[29] = 30;
-    char* test2 = (char*)allocate_memory(sizeof(char) * 50);
-    test2[0] = 'h';
-    test2[1] = 'f';
+    int* test = (int*)allocate_memory(sizeof(int) *50);
+    test[0] = 1;
+    test[2] = 2;
+    test[3] = 3;
+    test[4] = 4;
+    test[5] = 5;
+    printf("%d\n", test[4]);
+    test = (int*)reallocate_memory(test, sizeof(int) *2);
 
-    printf("%p\n", test);
-    printf("%p\n", test2);
-
-    //free_memory(test2);
-    free_memory(test);
-	float* test3 = (float*)allocate_memory(sizeof(float) * 10);
-    test3[0] = 34234.f;
-    printf("%p\n", test3);
-    printf("%d\n", test[29]);
-    free_memory(test2);
-    free_memory(test3);
+    printf("%d\n", test[0]);
+    printf("%d\n", test[4]);
     return 0;
 }
