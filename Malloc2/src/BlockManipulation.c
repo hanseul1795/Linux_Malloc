@@ -16,7 +16,7 @@ void initialize_block(t_block* p_block)
     p_block->free = false;
 }
 
-t_block *find_block(size_t p_size)
+t_block* find_block(size_t p_size)
 {
     t_block* temp = (t_block*)first_block_address;
     while(temp)
@@ -30,7 +30,7 @@ t_block *find_block(size_t p_size)
     return NULL;
 }
 
-void split_block(t_block *p_block, size_t p_size)
+void split_block(t_block* p_block, size_t p_size)
 {
     if(!p_block || p_size == 0)
         return;
@@ -64,14 +64,14 @@ t_block* try_to_fuse(t_block *p_block)
     return p_block;
 }
 
-void copy_data(t_block *p_src, t_block *p_dest)
+void copy_data(t_block* p_src, t_block* p_dest)
 {
     if (!p_src || !p_dest)
         return;
 
     reset_memory(p_dest->data, p_dest->size);
-    char *src = (char *) p_src->data;
-    char *dest = (char *) p_dest->data;
+    char* src = (char*) p_src->data;
+    char* dest = (char*) p_dest->data;
     for (size_t i = 0; i < p_src->size; ++i)
     {
         dest[i] = src[i];

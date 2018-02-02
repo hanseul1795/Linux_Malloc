@@ -11,7 +11,7 @@ size_t align(size_t p_size)
     return ((p_size + (sizeof(size_t) - 1)) & ~(sizeof(size_t) - 1));
 }
 
-void reset_memory(void *p_address, size_t p_size)
+void reset_memory(void* p_address, size_t p_size)
 {
     for (unsigned int i = 0; i < (unsigned int)(p_size); ++i)
     {

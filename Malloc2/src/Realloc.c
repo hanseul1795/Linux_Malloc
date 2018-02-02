@@ -4,7 +4,7 @@
 
 #include "../include/Realloc.h"
 
-void *reallocate_memory(void *p_address, size_t p_size)
+void* reallocate_memory(void* p_address, size_t p_size)
 {
     if(!p_address)
         return allocate_memory(p_size);
@@ -15,7 +15,7 @@ void *reallocate_memory(void *p_address, size_t p_size)
         t_block* resize_block = (t_block*)((char*) p_address - sizeof(t_block));
         if(resize_block->size >= aligned_size)
         {
-            if(resize_block->size - aligned_size >= sizeof(t_block) + sizeof(int))
+            if(resize_block->size - aligned_size >= sizeof(t_block) + sizeof(size_t))
             {
                 for(size_t i = aligned_size; i < resize_block->size; ++i)
                 {
@@ -29,7 +29,7 @@ void *reallocate_memory(void *p_address, size_t p_size)
             if(resize_block->next_block && resize_block->next_block->free && (resize_block->size + sizeof(t_block) + resize_block->next_block->size) >= aligned_size)
             {
                 try_to_fuse(resize_block);
-                if(resize_block->size - aligned_size >= (sizeof(t_block) + sizeof(int)))
+                if(resize_block->size - aligned_size >= (sizeof(t_block) + sizeof(size_t)))
                     split_block(resize_block, aligned_size);
             }
             else

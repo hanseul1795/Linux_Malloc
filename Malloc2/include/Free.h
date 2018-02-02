@@ -8,6 +8,6 @@
 #include "MemsetAlign.h"
 
 //Free_perso
-void free_memory(void *p_address);
+void free_memory(void* p_address);
 
 #endif //MALLOC2_FREE_H

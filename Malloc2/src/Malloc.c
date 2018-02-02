@@ -24,7 +24,7 @@ void* allocate_memory(size_t p_size)
         temp = find_block(p_size);
         if(temp)
         {
-            if((temp->size - aligned_size) >= (sizeof(t_block) + sizeof(int)))
+            if((temp->size - aligned_size) >= (sizeof(t_block) + sizeof(size_t)))
             {
                 split_block(temp, aligned_size);
             }

@@ -4,13 +4,13 @@
 
 #include "../include/Free.h"
 
-void free_memory(void *p_address)
+void free_memory(void* p_address)
 {
     if (!p_address)
         return;
 
-    t_block *temp = NULL;
-    t_block *free_manager = NULL;
+    t_block* temp = NULL;
+    t_block* free_manager = NULL;
     if(first_block_address)
     {
         if (p_address > first_block_address && p_address < sbrk(0))
