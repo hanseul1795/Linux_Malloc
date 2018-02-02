@@ -10,7 +10,7 @@ int main()
     test[4] = 4;
     test[5] = 5;
     printf("%d\n", test[4]);
-    test = (int*)reallocate_memory(test, sizeof(int) *2);
+    test = (int*)reallocate_memory(test, sizeof(int) *3);
 
     printf("%d\n", test[0]);
     printf("%d\n", test[4]);

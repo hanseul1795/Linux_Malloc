@@ -31,8 +31,6 @@ void *reallocate_memory(void *p_address, size_t p_size)
                 try_to_fuse(resize_block);
                 if(resize_block->size - aligned_size >= (sizeof(t_block) + sizeof(int)))
                     split_block(resize_block, aligned_size);
-
-
             }
             else
             {

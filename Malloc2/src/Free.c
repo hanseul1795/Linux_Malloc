@@ -24,7 +24,7 @@ void free_memory(void *p_address)
             }
             if (free_manager->next_block)
             {
-                free_manager = try_to_fuse(free_manager);
+                try_to_fuse(free_manager);
             }
             reset_memory(p_address, temp->size);
         }

@@ -6,11 +6,8 @@
 #define MALLOC2_SBLOCKSTRUCT_H
 
 #include <stdbool.h>
-#include <glob.h>
 #include <stdlib.h>
 #include <zconf.h>
-#include <math.h>
-
 typedef struct s_block t_block;
 
 struct s_block

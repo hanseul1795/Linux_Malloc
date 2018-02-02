@@ -66,24 +66,14 @@ t_block* try_to_fuse(t_block *p_block)
 
 void copy_data(t_block *p_src, t_block *p_dest)
 {
-    if(!p_src || !p_dest)
+    if (!p_src || !p_dest)
         return;
 
     reset_memory(p_dest->data, p_dest->size);
-    char* src = (char*)p_src->data;
-    char* dest = (char*)p_dest->data;
-    if(p_src->size >= p_dest->size)
+    char *src = (char *) p_src->data;
+    char *dest = (char *) p_dest->data;
+    for (size_t i = 0; i < p_src->size; ++i)
     {
-        for(size_t i = 0; i < p_dest->size; ++i)
-        {
-            dest[i] = src[i];
-        }
-    }
-    else if(p_src->size < p_dest->size)
-    {
-        for(size_t i = 0; i < p_src->size; ++i)
-        {
-            dest[i] = src[i];
-        }
+        dest[i] = src[i];
     }
 }
