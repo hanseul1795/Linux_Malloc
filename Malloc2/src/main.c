@@ -1,8 +1,12 @@
 #include <stdio.h>
+#include <bits/time.h>
+#include <time.h>
+#include <string.h>
 #include "../include/MemoryManagement.h"
 
 int main()
 {
+
     int* test = (int*)allocate_memory(sizeof(int) *50);
     test[0] = 1;
     test[2] = 2;

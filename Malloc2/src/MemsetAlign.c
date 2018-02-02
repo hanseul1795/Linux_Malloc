@@ -13,8 +13,8 @@ size_t align(size_t p_size)
 
 void reset_memory(void* p_address, size_t p_size)
 {
-    for (unsigned int i = 0; i < (unsigned int)(p_size); ++i)
+    for (size_t i = 0; i * sizeof(size_t)< (p_size); ++i)
     {
-        ((char*)p_address)[i] = 0;
+        ((size_t*)p_address)[i] = 0;
     }
 }
